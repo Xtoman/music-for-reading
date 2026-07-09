@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Музыка для чтения</string>
+    <string name="home_subtitle">Звуковые пейзажи, маскирующие шум. Полностью офлайн.</string>
+    <string name="player_title">Сейчас играет</string>
+    <string name="back">Назад</string>
+    <string name="play">Воспроизвести</string>
+    <string name="pause">Пауза</string>
+    <string name="stop">Стоп</string>
+    <string name="volume">Громкость</string>
+    <string name="sleep_timer">Таймер сна</string>
+    <string name="now_playing">Играет</string>
+    <string name="selected">Выбрано</string>
+    <string name="notification_channel_name">Воспроизведение</string>
+    <string name="notification_channel_desc">Управление фоновой музыкой</string>
+    <string name="notification_title">Музыка для чтения</string>
+
+    <string name="style_deep_ambient">Глубокий эмбиент</string>
+    <string name="style_deep_ambient_desc">Плотные дроны против гула транспорта</string>
+    <string name="style_soft_piano">Мягкое пианино</string>
+    <string name="style_soft_piano_desc">Пэд и пианино поверх маскирующего слоя</string>
+    <string name="style_rain_pad">Дождь и пэд</string>
+    <string name="style_rain_pad_desc">Текстура дождя, перекрывающая разговоры</string>
+    <string name="style_zen_garden">Дзен-сад</string>
+    <string name="style_zen_garden_desc">Ровные тоны с непрерывным шумовым слоем</string>
+    <string name="style_lofi_haze">Lo-fi туман</string>
+    <string name="style_lofi_haze_desc">Тёплые аккорды, заполняющие средние частоты</string>
+    <string name="style_night_forest">Ночной лес</string>
+    <string name="style_night_forest_desc">Низкие дроны с широкополосной маскировкой</string>
+
+    <string name="timer_off">Выкл</string>
+    <string name="timer_15">15 мин</string>
+    <string name="timer_30">30 мин</string>
+    <string name="timer_60">60 мин</string>
+    <string name="timer_90">90 мин</string>
+</resources>

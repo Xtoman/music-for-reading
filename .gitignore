@@ -1,0 +1,19 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+/app/.cxx
+*.aab
+*.keystore
+keystore.properties
+release.keystore
+
+# Keep only the installable APK under releases/
+*.apk
+!releases/*.apk
