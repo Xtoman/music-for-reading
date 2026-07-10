@@ -39,6 +39,7 @@ public:
 private:
     void applyStyle(MusicStyle style);
     void renderStyle(float* output, int numFrames, int numChannels);
+    void reseed(MusicStyle style);
     float nextRandom();
     float sampleMaskNoise();
     std::vector<float> buildScale(int rootMidi, const std::vector<int>& intervals, int octaves) const;

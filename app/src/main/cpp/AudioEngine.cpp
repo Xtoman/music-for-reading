@@ -1,6 +1,7 @@
 #include "AudioEngine.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstring>
 
@@ -46,6 +47,8 @@ AudioEngine::~AudioEngine() {
 }
 
 bool AudioEngine::start() {
+    // Fresh time-based seed so each playback session is unique
+    applyStyle(currentStyle_);
     running_.store(true);
     currentGain_ = 0.0f;
     sleepFadeGain_ = 1.0f;
@@ -58,9 +61,7 @@ void AudioEngine::stop() {
 }
 
 void AudioEngine::setStyle(MusicStyle style) {
-    if (style != currentStyle_) {
-        applyStyle(style);
-    }
+    applyStyle(style);
 }
 
 void AudioEngine::setVolume(float volume) {
@@ -95,6 +96,19 @@ float AudioEngine::nextRandom() {
     return static_cast<float>(rngState_) / static_cast<float>(UINT32_MAX);
 }
 
+void AudioEngine::reseed(MusicStyle style) {
+    using clock = std::chrono::steady_clock;
+    const auto now = clock::now().time_since_epoch();
+    const auto nanos = static_cast<uint64_t>(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(now).count());
+    // Mix time with style so parallel style switches still diverge
+    rngState_ = static_cast<uint32_t>(nanos ^ (nanos >> 32))
+        ^ (0xA5A5A5A5u + static_cast<uint32_t>(style) * 0x9E3779B9u);
+    if (rngState_ == 0) {
+        rngState_ = 0xC0FFEE01u;
+    }
+}
+
 float AudioEngine::sampleMaskNoise() {
     float white = nextRandom() * 2.0f - 1.0f;
     float pink = pinkNoise(white, pinkB_);
@@ -111,7 +125,7 @@ float AudioEngine::sampleMaskNoise() {
 
 void AudioEngine::applyStyle(MusicStyle style) {
     currentStyle_ = style;
-    rngState_ = 0x1000u + static_cast<uint32_t>(style) * 0x1111u;
+    reseed(style);
 
     for (auto& voice : voices_) {
         voice.phase = nextRandom();
