@@ -50,7 +50,8 @@ private:
         float pos = 0.0f;
         float rate = 1.0f;
         float gain = 0.0f;
-        float pan = 0.0f; // -1..1
+        float targetGain = 0.0f;
+        float pan = 0.0f;
     };
 
     struct LoopPlayer {
@@ -63,14 +64,16 @@ private:
     void applyStyle(MusicStyle style);
     void reseed(MusicStyle style);
     void renderStyle(float* output, int numFrames, int numChannels);
-    void triggerMelodyNote();
-    void advanceChord();
+    void startMelodyPhrase();
+    void triggerNextPhraseNote();
+    void morphHarmony();
     void fireOneShot(SampleId id, float midiNote, float gain, float pan);
     float nextRandom();
     float midiToHz(int midi) const;
     std::vector<int> buildScaleMidi(int root, const std::vector<int>& intervals, int octaves) const;
     float osc(float phase, int wave) const;
     float softMaskNoise();
+    int nearestScaleIndex(int midi) const;
 
     std::atomic<bool> running_{false};
     std::atomic<float> targetVolume_{0.8f};
@@ -90,34 +93,39 @@ private:
     SampleBank samples_;
 
     static constexpr int kMaxPads = 5;
-    static constexpr int kMaxShots = 8;
+    static constexpr int kMaxShots = 10;
     PadVoice pads_[kMaxPads]{};
     int activePads_ = 3;
     OneShot shots_[kMaxShots]{};
     LoopPlayer loopA_{};
     LoopPlayer loopB_{};
 
-    // Harmony / melody
     std::vector<int> chordRoots_;
     std::vector<int> chordIntervals_;
     std::vector<int> scaleMidi_;
     int chordIndex_ = 0;
     int chordRootMidi_ = 48;
-    int chordSamplesLeft_ = 0;
-    int melodySamplesLeft_ = 0;
+    int harmonySamplesLeft_ = 0;
+    int nextVoiceToMorph_ = 0;
+    float padGlide_ = 0.00004f;
+
+    // Melodic phrases (connected line, not isolated hits)
+    int phraseNotesRemaining_ = 0;
+    int phraseNoteSamplesLeft_ = 0;
+    int phraseRestSamplesLeft_ = 0;
     int lastMelodyIndex_ = -1;
+    float phraseDirection_ = 1.0f;
     SampleId melodySample_ = SampleId::SoftPiano;
-    float melodyGain_ = 0.35f;
-    float padGainScale_ = 1.0f;
+    float melodyGain_ = 0.28f;
+    float noteGapMin_ = 0.38f;
+    float noteGapMax_ = 0.72f;
+    float phraseRestMin_ = 3.5f;
+    float phraseRestMax_ = 7.0f;
+    int phraseLenMin_ = 4;
+    int phraseLenMax_ = 7;
     float maskGain_ = 0.04f;
+    float padLevel_ = 0.7f;
 
-    // Phrase shaping
-    float melodyGapMin_ = 1.2f;
-    float melodyGapMax_ = 2.8f;
-    float chordSecondsMin_ = 8.0f;
-    float chordSecondsMax_ = 14.0f;
-
-    // LFOs + noise
     float lfo1Phase_ = 0.0f;
     float lfo2Phase_ = 0.0f;
     float lfo1Rate_ = 0.03f;
