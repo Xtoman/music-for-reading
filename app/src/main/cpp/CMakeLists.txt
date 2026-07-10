@@ -18,6 +18,7 @@ endif()
 add_library(readingmusic SHARED
     native_bridge.cpp
     AudioEngine.cpp
+    SampleBank.cpp
     StylePresets.cpp
 )
 

@@ -11,7 +11,7 @@ class PlaybackController(
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying.asStateFlow()
 
-    private val _currentStyle = MutableStateFlow(MusicStyle.DEEP_AMBIENT)
+    private val _currentStyle = MutableStateFlow(MusicStyle.FANTASY)
     val currentStyle: StateFlow<MusicStyle> = _currentStyle.asStateFlow()
 
     private val _volume = MutableStateFlow(0.85f)

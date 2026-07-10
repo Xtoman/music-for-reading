@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SampleBank.h"
+
 #include <atomic>
 #include <cstdint>
 #include <vector>
@@ -7,12 +9,13 @@
 namespace readingmusic {
 
 enum class MusicStyle : int {
-    DeepAmbient = 0,
-    SoftPiano = 1,
-    RainPad = 2,
-    ZenGarden = 3,
-    LofiHaze = 4,
-    NightForest = 5
+    Fantasy = 0,
+    SciFi = 1,
+    Noir = 2,
+    Classical = 3,
+    Nature = 4,
+    Lofi = 5,
+    Meditation = 6
 };
 
 class AudioEngine {
@@ -32,15 +35,42 @@ public:
     void render(float* output, int numFrames, int numChannels);
 
 private:
+    struct PadVoice {
+        float phase = 0.0f;
+        float frequency = 110.0f;
+        float targetFrequency = 110.0f;
+        float amplitude = 0.1f;
+        float detune = 0.0f;
+        int wave = 0;
+    };
+
+    struct OneShot {
+        bool active = false;
+        SampleId sample = SampleId::SoftPiano;
+        float pos = 0.0f;
+        float rate = 1.0f;
+        float gain = 0.0f;
+        float pan = 0.0f; // -1..1
+    };
+
+    struct LoopPlayer {
+        SampleId sample = SampleId::RainLoop;
+        float pos = 0.0f;
+        float gain = 0.0f;
+        float rate = 1.0f;
+    };
+
     void applyStyle(MusicStyle style);
-    void renderStyle(float* output, int numFrames, int numChannels);
     void reseed(MusicStyle style);
+    void renderStyle(float* output, int numFrames, int numChannels);
     void triggerMelodyNote();
     void advanceChord();
+    void fireOneShot(SampleId id, float midiNote, float gain, float pan);
     float nextRandom();
-    float sampleTextureNoise();
-    std::vector<float> buildScale(int rootMidi, const std::vector<int>& intervals, int octaves) const;
     float midiToHz(int midi) const;
+    std::vector<int> buildScaleMidi(int root, const std::vector<int>& intervals, int octaves) const;
+    float osc(float phase, int wave) const;
+    float softMaskNoise();
 
     std::atomic<bool> running_{false};
     std::atomic<float> targetVolume_{0.8f};
@@ -54,53 +84,46 @@ private:
     float sleepFadeStep_ = 0.0f;
     int sleepFadeSamplesRemaining_ = 0;
 
-    MusicStyle currentStyle_ = MusicStyle::DeepAmbient;
+    MusicStyle currentStyle_ = MusicStyle::Fantasy;
     uint32_t rngState_ = 0xC0FFEE01u;
 
-    struct Voice {
-        float phase = 0.0f;
-        float frequency = 220.0f;
-        float amplitude = 0.2f;
-        float targetFrequency = 220.0f;
-        int waveType = 0;
-        float detune = 0.0f;
-    };
+    SampleBank samples_;
 
-    static constexpr int kMaxVoices = 6;
-    Voice voices_[kMaxVoices]{};
-    int activeVoices_ = 3;
+    static constexpr int kMaxPads = 5;
+    static constexpr int kMaxShots = 8;
+    PadVoice pads_[kMaxPads]{};
+    int activePads_ = 3;
+    OneShot shots_[kMaxShots]{};
+    LoopPlayer loopA_{};
+    LoopPlayer loopB_{};
 
-    // Soft texture (not a masking wall)
-    float pinkB_[7]{};
-    float brown_ = 0.0f;
-    float midLp_ = 0.0f;
-    float textureGain_ = 0.03f;
-    float rainGain_ = 0.0f;
-
-    // Melody / arp
-    float melodyPhase_ = 0.0f;
-    float melodyFrequency_ = 440.0f;
-    float melodyEnvelope_ = 0.0f;
-    float melodyVelocity_ = 0.35f;
-    float melodyDecay_ = 0.9995f;
-    int melodySamplesUntilNext_ = 0;
-    int melodyWave_ = 0;
-    int lastMelodyIndex_ = -1;
-
-    // Chord progression
-    int chordRootMidi_ = 48;
-    int chordIndex_ = 0;
-    int chordSamplesUntilNext_ = 0;
+    // Harmony / melody
     std::vector<int> chordRoots_;
     std::vector<int> chordIntervals_;
+    std::vector<int> scaleMidi_;
+    int chordIndex_ = 0;
+    int chordRootMidi_ = 48;
+    int chordSamplesLeft_ = 0;
+    int melodySamplesLeft_ = 0;
+    int lastMelodyIndex_ = -1;
+    SampleId melodySample_ = SampleId::SoftPiano;
+    float melodyGain_ = 0.35f;
+    float padGainScale_ = 1.0f;
+    float maskGain_ = 0.04f;
 
-    // LFOs
+    // Phrase shaping
+    float melodyGapMin_ = 1.2f;
+    float melodyGapMax_ = 2.8f;
+    float chordSecondsMin_ = 8.0f;
+    float chordSecondsMax_ = 14.0f;
+
+    // LFOs + noise
     float lfo1Phase_ = 0.0f;
     float lfo2Phase_ = 0.0f;
     float lfo1Rate_ = 0.03f;
     float lfo2Rate_ = 0.05f;
-
-    std::vector<float> scale_;
+    float pinkB_[7]{};
+    float brown_ = 0.0f;
 };
 
 } // namespace readingmusic

@@ -8,42 +8,47 @@ enum class MusicStyle(
     @StringRes val titleRes: Int,
     @StringRes val descriptionRes: Int
 ) {
-    DEEP_AMBIENT(
+    FANTASY(
         id = 0,
-        titleRes = R.string.style_deep_ambient,
-        descriptionRes = R.string.style_deep_ambient_desc
+        titleRes = R.string.style_fantasy,
+        descriptionRes = R.string.style_fantasy_desc
     ),
-    SOFT_PIANO(
+    SCI_FI(
         id = 1,
-        titleRes = R.string.style_soft_piano,
-        descriptionRes = R.string.style_soft_piano_desc
+        titleRes = R.string.style_scifi,
+        descriptionRes = R.string.style_scifi_desc
     ),
-    RAIN_PAD(
+    NOIR(
         id = 2,
-        titleRes = R.string.style_rain_pad,
-        descriptionRes = R.string.style_rain_pad_desc
+        titleRes = R.string.style_noir,
+        descriptionRes = R.string.style_noir_desc
     ),
-    ZEN_GARDEN(
+    CLASSICAL(
         id = 3,
-        titleRes = R.string.style_zen_garden,
-        descriptionRes = R.string.style_zen_garden_desc
+        titleRes = R.string.style_classical,
+        descriptionRes = R.string.style_classical_desc
     ),
-    LOFI_HAZE(
+    NATURE(
         id = 4,
-        titleRes = R.string.style_lofi_haze,
-        descriptionRes = R.string.style_lofi_haze_desc
+        titleRes = R.string.style_nature,
+        descriptionRes = R.string.style_nature_desc
     ),
-    NIGHT_FOREST(
+    LOFI(
         id = 5,
-        titleRes = R.string.style_night_forest,
-        descriptionRes = R.string.style_night_forest_desc
+        titleRes = R.string.style_lofi,
+        descriptionRes = R.string.style_lofi_desc
+    ),
+    MEDITATION(
+        id = 6,
+        titleRes = R.string.style_meditation,
+        descriptionRes = R.string.style_meditation_desc
     );
 
     companion object {
         val all = entries.toList()
 
         fun fromId(id: Int): MusicStyle =
-            entries.firstOrNull { it.id == id } ?: DEEP_AMBIENT
+            entries.firstOrNull { it.id == id } ?: FANTASY
     }
 }
 

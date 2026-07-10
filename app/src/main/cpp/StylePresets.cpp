@@ -4,18 +4,19 @@ namespace readingmusic {
 
 const char* styleName(MusicStyle style) {
     switch (style) {
-        case MusicStyle::DeepAmbient: return "Deep Ambient";
-        case MusicStyle::SoftPiano: return "Soft Piano";
-        case MusicStyle::RainPad: return "Rain & Pad";
-        case MusicStyle::ZenGarden: return "Zen Garden";
-        case MusicStyle::LofiHaze: return "Lo-fi Haze";
-        case MusicStyle::NightForest: return "Night Forest";
+        case MusicStyle::Fantasy: return "Fantasy";
+        case MusicStyle::SciFi: return "Sci-Fi";
+        case MusicStyle::Noir: return "Noir";
+        case MusicStyle::Classical: return "Classical";
+        case MusicStyle::Nature: return "Nature";
+        case MusicStyle::Lofi: return "Lo-fi";
+        case MusicStyle::Meditation: return "Meditation";
         default: return "Unknown";
     }
 }
 
 int styleCount() {
-    return 6;
+    return 7;
 }
 
 } // namespace readingmusic
