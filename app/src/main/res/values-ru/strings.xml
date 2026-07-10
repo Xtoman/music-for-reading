@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Музыка для чтения</string>
-    <string name="home_subtitle">Звуковые пейзажи, маскирующие шум. Полностью офлайн.</string>
+    <string name="home_subtitle">Мелодичные эмбиент-пейзажи для чтения. Полностью офлайн.</string>
     <string name="player_title">Сейчас играет</string>
     <string name="back">Назад</string>
     <string name="play">Воспроизвести</string>
@@ -16,17 +16,17 @@
     <string name="notification_title">Музыка для чтения</string>
 
     <string name="style_deep_ambient">Глубокий эмбиент</string>
-    <string name="style_deep_ambient_desc">Плотные дроны против гула транспорта</string>
+    <string name="style_deep_ambient_desc">Тёплые пэды, медленные аккорды и мягкая мелодия</string>
     <string name="style_soft_piano">Мягкое пианино</string>
-    <string name="style_soft_piano_desc">Пэд и пианино поверх маскирующего слоя</string>
+    <string name="style_soft_piano_desc">Нежные фразы пианино поверх тихого пэда</string>
     <string name="style_rain_pad">Дождь и пэд</string>
-    <string name="style_rain_pad_desc">Текстура дождя, перекрывающая разговоры</string>
+    <string name="style_rain_pad_desc">Пышный пэд, лёгкий дождь и спокойные фразы</string>
     <string name="style_zen_garden">Дзен-сад</string>
-    <string name="style_zen_garden_desc">Ровные тоны с непрерывным шумовым слоем</string>
+    <string name="style_zen_garden_desc">Редкая пентатоника и «дышащие» тоны</string>
     <string name="style_lofi_haze">Lo-fi туман</string>
-    <string name="style_lofi_haze_desc">Тёплые аккорды, заполняющие средние частоты</string>
+    <string name="style_lofi_haze_desc">Мягкие септаккорды и ленивая мелодия</string>
     <string name="style_night_forest">Ночной лес</string>
-    <string name="style_night_forest_desc">Низкие дроны с широкополосной маскировкой</string>
+    <string name="style_night_forest_desc">Низкие дроны и тихие мелодические искры</string>
 
     <string name="timer_off">Выкл</string>
     <string name="timer_15">15 мин</string>

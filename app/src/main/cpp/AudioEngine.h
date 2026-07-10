@@ -15,11 +15,6 @@ enum class MusicStyle : int {
     NightForest = 5
 };
 
-struct StyleConfig {
-    MusicStyle style;
-    uint32_t seed;
-};
-
 class AudioEngine {
 public:
     AudioEngine();
@@ -40,13 +35,15 @@ private:
     void applyStyle(MusicStyle style);
     void renderStyle(float* output, int numFrames, int numChannels);
     void reseed(MusicStyle style);
+    void triggerMelodyNote();
+    void advanceChord();
     float nextRandom();
-    float sampleMaskNoise();
+    float sampleTextureNoise();
     std::vector<float> buildScale(int rootMidi, const std::vector<int>& intervals, int octaves) const;
     float midiToHz(int midi) const;
 
     std::atomic<bool> running_{false};
-    std::atomic<float> targetVolume_{0.85f};
+    std::atomic<float> targetVolume_{0.8f};
     std::atomic<float> fadeSeconds_{2.5f};
     std::atomic<bool> sleepFadeRequested_{false};
     std::atomic<float> sleepFadeSeconds_{0.0f};
@@ -69,25 +66,33 @@ private:
         float detune = 0.0f;
     };
 
-    static constexpr int kMaxVoices = 8;
+    static constexpr int kMaxVoices = 6;
     Voice voices_[kMaxVoices]{};
-    int activeVoices_ = 4;
+    int activeVoices_ = 3;
 
-    // Broadband masking bed (pink + brown + mid-band)
+    // Soft texture (not a masking wall)
     float pinkB_[7]{};
     float brown_ = 0.0f;
     float midLp_ = 0.0f;
-    float midHp_ = 0.0f;
-    float maskNoiseGain_ = 0.18f;
-    float padNoiseGain_ = 0.0f;
-    int noiseType_ = 1;
+    float textureGain_ = 0.03f;
+    float rainGain_ = 0.0f;
 
-    // Arp / piano
-    float arpFrequency_ = 440.0f;
-    float arpPhase_ = 0.0f;
-    float arpEnvelope_ = 0.0f;
-    int arpSamplesUntilNext_ = 0;
-    float arpVelocity_ = 0.3f;
+    // Melody / arp
+    float melodyPhase_ = 0.0f;
+    float melodyFrequency_ = 440.0f;
+    float melodyEnvelope_ = 0.0f;
+    float melodyVelocity_ = 0.35f;
+    float melodyDecay_ = 0.9995f;
+    int melodySamplesUntilNext_ = 0;
+    int melodyWave_ = 0;
+    int lastMelodyIndex_ = -1;
+
+    // Chord progression
+    int chordRootMidi_ = 48;
+    int chordIndex_ = 0;
+    int chordSamplesUntilNext_ = 0;
+    std::vector<int> chordRoots_;
+    std::vector<int> chordIntervals_;
 
     // LFOs
     float lfo1Phase_ = 0.0f;
@@ -95,13 +100,7 @@ private:
     float lfo1Rate_ = 0.03f;
     float lfo2Rate_ = 0.05f;
 
-    // Night forest sparkles
-    float sparkleEnvelope_ = 0.0f;
-    float sparkleFrequency_ = 1200.0f;
-    int sparkleSamplesUntilNext_ = 0;
-
     std::vector<float> scale_;
-    float layerGains_[4]{0.4f, 0.3f, 0.2f, 0.1f};
 };
 
 } // namespace readingmusic
